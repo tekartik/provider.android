@@ -92,6 +92,11 @@ public abstract class SqlDatabase {
 
 		public abstract void onUpgrade(int oldVersion, int newVersion);
 
+		// Default implementation crashes, good
+		public void onDowngrade(int oldVersion, int newVersion) {
+			super.onDowngrade(onOpeningDatabase, oldVersion, newVersion);
+		}
+
 		@Override
 		public final void onCreate(SQLiteDatabase db) {
 			onOpeningDatabase = db;
@@ -111,6 +116,13 @@ public abstract class SqlDatabase {
 		public final void onOpen(SQLiteDatabase db) {
 			onOpeningDatabase = db;
 			onOpen();
+			onOpeningDatabase = null;
+		}
+
+		@Override
+		public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			onOpeningDatabase = db;
+			onDowngrade(oldVersion, newVersion);
 			onOpeningDatabase = null;
 		}
 	}
