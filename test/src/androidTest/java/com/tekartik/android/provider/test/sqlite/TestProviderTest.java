@@ -30,6 +30,7 @@ public class TestProviderTest extends ProviderTestCase2<TestProvider> {
         SqlDatabase.LOGV = true;
         setContext(InstrumentationRegistry.getTargetContext());
         super.setUp();
+        getProvider().setInMemoryDatabase();
     }
 
 
