@@ -3,11 +3,17 @@ package com.tekartik.android.provider.example;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.tekartik.android.provider.example.BuildConfig;
 import com.tekartik.testmenu.Test;
 
 
 public class MainMenuActivity extends Test.MenuActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Test.BuildConfig.DEBUG = BuildConfig.DEBUG;
+        Test.Menu.setStartMenu(new MainTestMenu());
+    }
 
     static public class MainTestMenu extends Test.Menu {
 
@@ -28,12 +34,5 @@ public class MainMenuActivity extends Test.MenuActivity {
                     }
             );
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Test.BuildConfig.DEBUG = BuildConfig.DEBUG;
-        Test.Menu.setStartMenu(new MainTestMenu());
     }
 }
