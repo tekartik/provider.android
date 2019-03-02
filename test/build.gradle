@@ -29,4 +29,5 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     implementation project(':library')
+    implementation "com.github.tekartik:utils.android:${tekartikUtilsVersion}"
 }

@@ -89,7 +89,6 @@ public abstract class SqlProvider extends Provider implements
 	abstract protected int deleteInTransaction(Uri uri, String selection,
                                                String[] selectionArgs, boolean callerIsSyncAdapter);
                                                */
-
     protected abstract SqlDatabase newDatabase();
 
     /**

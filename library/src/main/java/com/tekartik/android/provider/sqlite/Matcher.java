@@ -41,6 +41,7 @@ public class Matcher {
         public int code;
         public boolean byId;
         private String tableNames;
+
         public Target(int code, String tableNames) {
             this(code, tableNames, false);
         }

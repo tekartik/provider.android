@@ -3,17 +3,20 @@ package com.tekartik.android.provider.test.sqlite;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.test.rule.provider.ProviderTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.tekartik.android.provider.sqlite.SqlDatabase;
 import com.tekartik.android.provider.test.sqlite.data.TestContract;
 import com.tekartik.android.provider.test.sqlite.data.TestProvider;
+import com.tekartik.android.utils.CursorUtils;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.tekartik.android.provider.test.sqlite.data.TestContract.Records.FIELD_STRING_TEST;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -26,25 +29,19 @@ public class TestProviderTest {
     final ProviderTestRule providerTestRule = new ProviderTestRule
             .Builder(TestProvider.class, TestContract.AUTHORITY).build();
 
-    ContentResolver getProvider() {
+    ContentResolver getContentResolver() {
         return providerTestRule.getResolver();
-        // return provider;
     }
 
     @Before
     public void setUp() throws Exception {
         // quick debug
         SqlDatabase.LOGV = true;
-        getProvider().call(TestContract.CONTENT_URI, TestContract.METHOD_USE_IN_MEMORY_DATABASE, null, null);
-        /*
-        setContext(InstrumentationRegistry.getTargetContext());
-        super.setUp();
-        getProvider().setInMemoryDatabase();
-        */
+        getContentResolver().call(TestContract.CONTENT_URI, TestContract.METHOD_USE_IN_MEMORY_DATABASE, null, null);
     }
 
     int getRecordCount() {
-        Cursor cursor = getProvider().query(TestContract.Records.CONTENT_URI, null, null,
+        Cursor cursor = getContentResolver().query(TestContract.Records.CONTENT_URI, null, null,
                 null, null);
         int count = cursor.getCount();
         cursor.close();
@@ -59,18 +56,36 @@ public class TestProviderTest {
     @Test
     public void insert() {
         ContentValues cv = new ContentValues();
-        cv.put(TestContract.Records.FIELD_STRING_TEST, "some_content");
-        getProvider().insert(TestContract.Records.CONTENT_URI, cv);
+        cv.put(FIELD_STRING_TEST, "some_content");
+        getContentResolver().insert(TestContract.Records.CONTENT_URI, cv);
         assertThat(getRecordCount(), is(1));
-        getProvider().insert(TestContract.Records.CONTENT_URI, cv);
+        getContentResolver().insert(TestContract.Records.CONTENT_URI, cv);
         assertThat(getRecordCount(), is(2));
     }
 
-    static public class UnitTestProvider extends TestProvider {
-
-        UnitTestProvider() {
-            setInMemoryDatabase();
-        }
-
+    @Test
+    public void update() {
+        assertThat(getRecordCount(), is(0));
+        ContentValues cv = new ContentValues();
+        cv.put(FIELD_STRING_TEST, "some_content");
+        Uri uri = getContentResolver().insert(TestContract.Records.CONTENT_URI, cv);
+        cv = new ContentValues();
+        cv.put(FIELD_STRING_TEST, "new_content");
+        int updated = getContentResolver().update(uri, cv, null, null);
+        assertThat(updated, is(1));
+        cv = CursorUtils.getFirstContentValuesAndClose(getContentResolver().query(uri, null, null, null, null));
+        assertThat(cv.getAsString(FIELD_STRING_TEST), is("new_content"));
     }
+
+    @Test
+    public void delete() {
+        assertThat(getRecordCount(), is(0));
+        ContentValues cv = new ContentValues();
+        cv.put(FIELD_STRING_TEST, "some_content");
+        Uri uri = getContentResolver().insert(TestContract.Records.CONTENT_URI, cv);
+        assertThat(getRecordCount(), is(1));
+        getContentResolver().delete(uri, null, null);
+        assertThat(getRecordCount(), is(0));
+    }
+
 }
