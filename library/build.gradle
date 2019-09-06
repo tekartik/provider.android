@@ -20,9 +20,9 @@ dependencies {
     // test
     testImplementation 'junit:junit:4.12'
 
-    implementation "com.google.code.gson:gson:${gsonVersion}"
-    implementation "com.github.tekartik:utils.android:${tekartikUtilsVersion}"
-    implementation "androidx.appcompat:appcompat:${appCompatVersion}"
+    implementation "com.google.code.gson:gson:2.8.5"
+    implementation "com.github.tekartik:utils.android:0.6.1"
+    implementation "androidx.appcompat:appcompat:1.1.0"
 
 
 }

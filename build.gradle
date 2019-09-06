@@ -6,7 +6,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -32,8 +32,8 @@ task clean(type: Delete) {
 ext {
     sdkVersion = 28
     gsonVersion = '2.8.5'
-    appCompatVersion = '1.0.0'
-    tekartikTestVersion = '0.5.1'
-    tekartikUtilsVersion = '0.6.0'
+    appCompatVersion = '1.1.0'
+    tekartikTestVersion = '0.5.2'
+    tekartikUtilsVersion = '0.6.1'
     testLibVersion = '1.0.1'
 }
